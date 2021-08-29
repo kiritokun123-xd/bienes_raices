@@ -1,0 +1,17 @@
+{
+    "name": "usuario/bienesraices_php",
+    "description": "Creando un proyecto con POO",
+    "type": "project",
+    "authors": [
+        {
+            "name": "kiritokun123-xd",
+            "email": "david22android@gmail.com"
+        }
+    ],
+    "require": {},
+    "autoload" :{
+        "psr-4": {
+            "App\\" : "./classes"
+        }
+    }
+}
