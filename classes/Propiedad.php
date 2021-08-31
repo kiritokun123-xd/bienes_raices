@@ -37,7 +37,7 @@ class Propiedad{
         $this->wc = $args['wc'] ?? '';
         $this->estacionamiento = $args['estacionamiento'] ?? '';
         $this->creado = date('Y,m,d');
-        $this->vendedorId = $args['vendedorId'] ?? '';
+        $this->vendedorId = $args['vendedorId'] ?? 1;
     }
 
     public function guardar(){
@@ -125,4 +125,41 @@ class Propiedad{
         return self::$errores;
     }
 
+    //Lista todas las propiedades
+    public static function all(){
+        //ESCRIBIR EL QUERY
+        $query = "SELECT * FROM propiedades";
+        
+        $resultado = self::constularSQL($query);
+
+        return $resultado;
+    }
+
+    public static function constularSQL($query){
+        //consultar la bd
+        $resultado = self::$db->query($query);
+
+        //Iterar sobre los resultados
+        $array = [];
+
+        while($registro = $resultado->fetch_assoc()){
+            $array[] = self::crearObejto($registro);
+        }
+        
+        //Liberar memoria
+        $resultado->free();
+
+        //retornar los resultados
+        return $array;
+    }
+
+    protected static function crearObejto($registro){
+        $objeto = new self;
+        foreach($registro as $key=>$value){
+            if(property_exists($objeto, $key)){
+                $objeto->$key = $value;
+            }
+        }
+        return $objeto;
+    }
 }
