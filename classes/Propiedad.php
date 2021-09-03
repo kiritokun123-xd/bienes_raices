@@ -39,13 +39,40 @@ class Propiedad{
         $this->creado = date('Y,m,d');
         $this->vendedorId = $args['vendedorId'] ?? 1;
     }
-
     public function guardar(){
-
+        if(isset($this->id)){
+            //Actualizar
+            $this->actualizar();
+        }else{
+            //Creando un nuevo registo
+            $this->crear();
+        }
+    }
+    public function actualizar(){
         //SANITIZAR LOS DATOS
         $atributos = $this->sanitizarAtributos();
 
-        $string = join(', ', array_keys($atributos));
+        $valores = [];
+
+        foreach($atributos as $key=>$value){
+            $valores[] = "{$key}='{$value}'";
+        }
+        $query = "UPDATE propiedades SET ";
+        $query .= join(', ', $valores);
+        $query .= " WHERE id = " . self::$db->escape_string($this->id);
+        $query .= " LIMIT 1 ";
+        //debuguear($query);
+        $resultado = self::$db->query($query);
+        
+        if($resultado){
+            //REDIRECIONAR AL USUARIO
+            header('Location: /admin?resultado=2');
+        }
+    }
+    public function crear(){
+
+        //SANITIZAR LOS DATOS
+        $atributos = $this->sanitizarAtributos();
 
         //INSERTAR EN LA BASE DE DATOS
         $query = "INSERT INTO propiedades ( ";
@@ -70,6 +97,14 @@ class Propiedad{
 
     //SUBIDA DE ARCHIVOS
     public function setImagen($imagen){
+        //Elimina la imagen previa
+        if(isset($this->id)){
+            //comprobar is existe el archivo
+            $existeArchivo = file_exists(CARPETA_IMAGENES . $this->imagen);
+            if($existeArchivo){
+                unlink(CARPETA_IMAGENES . $this->imagen);
+            }
+        }
         //asignar al atributo el nombre de la imagen
         if($imagen){
             $this->imagen = $imagen;
@@ -135,6 +170,15 @@ class Propiedad{
         return $resultado;
     }
 
+    //Busca una propiedad por su id
+    public static function find($id){
+        $query = "SELECT * FROM propiedades WHERE id = ${id}";
+
+        $resultado = self::constularSQL($query);
+
+        return array_shift($resultado);
+    }
+
     public static function constularSQL($query){
         //consultar la bd
         $resultado = self::$db->query($query);
@@ -161,5 +205,14 @@ class Propiedad{
             }
         }
         return $objeto;
+    }
+
+    //Sincroniza el objeto en memoria con los cambios realizads por el usuario
+    public function sincronizar($args = []){
+        foreach($args as $key => $value){
+            if(property_exists($this, $key) && !is_null($value)){
+                $this->$key=$value;
+            }
+        }
     }
 }
