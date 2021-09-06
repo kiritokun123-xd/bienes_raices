@@ -1,13 +1,12 @@
 <?php
     require '../includes/app.php';
     use App\Propiedad;
-use App\Vendedor;
+    use App\Vendedor;
 
-estadoAutenticado();
+    estadoAutenticado();
 
     //IMPLEMNTAR UN METODO PARA OBTENER TODAS LAS PROPIEDADES
     $propiedades = Propiedad::all();
-    //$vendedores = Vendedor::all();
 
     //MUESTRA MENSAJE CONDICIONAL
     $resultado = $_GET['resultado'] ?? null;
@@ -39,7 +38,10 @@ estadoAutenticado();
         <?php elseif($resultado == 3):?>
             <p class="alerta exito">Anuncio Eliminado Correctamente</p>
         <?php endif; ?>
+
         <a href="/admin/propiedades/crear.php" class="boton boton-verde">Nueva Propiedad</a>
+
+        <h2>Propiedades</h2>
         <table class="propiedades">
             <thead>
                 <tr>
@@ -69,6 +71,8 @@ estadoAutenticado();
                 <?php endforeach; ?>
             </tbody>
         </table>
+
+        <h2>Vendedores</h2>
     </main>
                 
     <?php     
