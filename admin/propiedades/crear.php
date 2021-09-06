@@ -46,12 +46,7 @@
             $image->save(CARPETA_IMAGENES . $nombreImagen);
 
             //SUBE A LA BD
-            $resultado = $propiedad->guardar();
-
-            if($resultado){
-                //REDIRECIONAR AL USUARIO
-                header('Location: /admin?resultado=1');
-            }
+            $propiedad->guardar();
         }
 
     }

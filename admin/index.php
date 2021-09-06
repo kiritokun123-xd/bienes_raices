@@ -1,11 +1,13 @@
 <?php
     require '../includes/app.php';
     use App\Propiedad;
+use App\Vendedor;
 
-    estadoAutenticado();
+estadoAutenticado();
 
     //IMPLEMNTAR UN METODO PARA OBTENER TODAS LAS PROPIEDADES
     $propiedades = Propiedad::all();
+    //$vendedores = Vendedor::all();
 
     //MUESTRA MENSAJE CONDICIONAL
     $resultado = $_GET['resultado'] ?? null;
@@ -17,20 +19,9 @@
         
 
         if($id){
-            //elimnar archivo
-            $query = "SELECT imagen FROM propiedades WHERE id = ${id}";
+            $propiedad = Propiedad::find($id);
 
-            $resultado = mysqli_query($db, $query);
-            $propiedad = mysqli_fetch_assoc($resultado);
-
-            unlink('../imagenes/' . $propiedad['imagen']);
-            //ELIMINAR LA PROPIEDAD 
-            $query = "DELETE FROM propiedades WHERE id = ${id}";
-            $resultado = mysqli_query($db, $query);
-
-            if($resultado){
-                header('Location: /admin?resultado=3');
-            }
+            $propiedad->eliminar();
         }
     }
 
