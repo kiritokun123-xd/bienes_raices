@@ -133,7 +133,7 @@ class ActiveRecord{
     }
 
     //Lista todos los registros
-        public static function all(){
+    public static function all(){
         //ESCRIBIR EL QUERY
         $query = "SELECT * FROM " . static::$tabla;
         
@@ -141,6 +141,17 @@ class ActiveRecord{
 
         return $resultado;
     }
+    
+    // Obtiene determinado número de registros
+    public static function get($cantidad){
+        //ESCRIBIR EL QUERY
+        $query = "SELECT * FROM " . static::$tabla . " LIMIT " . $cantidad;
+        
+        $resultado = self::constularSQL($query);
+
+        return $resultado;
+    }
+
 
     //Busca un registro por su id
     public static function find($id){

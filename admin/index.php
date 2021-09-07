@@ -112,9 +112,7 @@
         </table>
     </main>
                 
-    <?php     
+<?php     
 
-    //CERRAR LA CONEXION
-    mysqli_close($db);
     incluirTemplate('footer');
 ?>
